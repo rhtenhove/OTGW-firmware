@@ -620,11 +620,11 @@ void print_status(uint16_t& value)
       sendMQTTData("status_master", _flag8_master);
       sendMQTTData("ch_enable",             (((OTdata.valueHB) & 0x01) ? "ON" : "OFF"));  
       sendMQTTData("dhw_enable",            (((OTdata.valueHB) & 0x02) ? "ON" : "OFF"));  
-      sendMQTTData("cooling_enable",        (((OTdata.valueHB) & 0x04) ? "ON" : "OFF"));   
-      sendMQTTData("otc_active",            (((OTdata.valueHB) & 0x08) ? "ON" : "OFF"));  
-      sendMQTTData("ch2_enable",            (((OTdata.valueHB) & 0x10) ? "ON" : "OFF"));  
-      sendMQTTData("summerwintertime",      (((OTdata.valueHB) & 0x20) ? "ON" : "OFF"));  
-      sendMQTTData("dhw_blocking",          (((OTdata.valueHB) & 0x40) ? "ON" : "OFF"));  
+      // sendMQTTData("cooling_enable",        (((OTdata.valueHB) & 0x04) ? "ON" : "OFF"));   
+      // sendMQTTData("otc_active",            (((OTdata.valueHB) & 0x08) ? "ON" : "OFF"));  
+      // sendMQTTData("ch2_enable",            (((OTdata.valueHB) & 0x10) ? "ON" : "OFF"));  
+      // sendMQTTData("summerwintertime",      (((OTdata.valueHB) & 0x20) ? "ON" : "OFF"));  
+      // sendMQTTData("dhw_blocking",          (((OTdata.valueHB) & 0x40) ? "ON" : "OFF"));  
 
       OTcurrentSystemState.MasterStatus = OTdata.valueHB;
     }
@@ -1459,8 +1459,18 @@ void processOT(const char *buf, int len){
     OTdata.valueHB = (value >> 8) & 0xFF;             // byte 3 = high byte
     OTdata.valueLB = value & 0xFF;                    // byte 4 = low byte
     OTdata.time = millis();                           // time of reception    
-    OTdata.skipthis = false;                          // default: do not skip this message (will be sent to MQTT and not stored in state data object)
+    OTdata.skipthis = true;                          // default: do not skip this message (will be sent to MQTT and not stored in state data object)
     
+    switch (static_cast<OpenThermMessageID>(OTdata.id)) {
+      case OT_TrSet:                                  OTdata.skipthis = false; break;
+case OT_Tr:                                  OTdata.skipthis = false;     break;  
+case OT_Command:                              OTdata.skipthis = false;    break; 
+        default:
+            break;
+      }
+
+
+
     if (cntOTmessagesprocessed == 1) {       //first message needs to be put in the buffer
       //just store current message and delay processing
       delayedOTdata = OTdata;       //store current msg
