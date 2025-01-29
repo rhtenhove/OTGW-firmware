@@ -446,7 +446,7 @@ void sendMQTT(const char* topic, const char *json, const size_t len)
 void resetMQTTBufferSize()
 {
   if (!settingMQTTenable) return;
-  MQTTclient.setBufferSize(128);
+  MQTTclient.setBufferSize(512);
 }
 //===========================================================================================
 bool splitLine(String sIn, char del, byte &cID, String &cKey, String &cVal) {
