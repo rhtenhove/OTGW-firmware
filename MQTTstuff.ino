@@ -429,7 +429,8 @@ void sendMQTT(const char* topic, const char *json, const size_t len)
   if (!MQTTclient.connected()) {DebugTln(F("Error: MQTT broker not connected.")); PrintMQTTError(); return;} 
   if (!isValidIP(MQTTbrokerIP)) {DebugTln(F("Error: MQTT broker IP not valid.")); return;} 
   MQTTDebugTf(PSTR("Sending MQTT: server %s:%d => TopicId [%s] --> Message [%s]\r\n"), settingMQTTbroker.c_str(), settingMQTTbrokerPort, topic, json);
-  if (MQTTclient.getBufferSize() < len) MQTTclient.setBufferSize(len); //resize buffer when needed
+  // if (MQTTclient.getBufferSize() < len) 
+  MQTTclient.setBufferSize(len);
 
   if (MQTTclient.beginPublish(topic, len, true)){
     for (size_t i = 0; i<len; i++) {
@@ -634,7 +635,7 @@ bool doAutoConfigureMsgid(byte OTid)
 
     //sendMQTT(CSTR(sTopic), CSTR(sMsg), (sTopic.length() + sMsg.length()+2));
     sendMQTT(sTopic, sMsg);
-    resetMQTTBufferSize();
+    // resetMQTTBufferSize();
     // delay(10);
     _result = true;
 
@@ -646,7 +647,7 @@ bool doAutoConfigureMsgid(byte OTid)
   fh.close();
 
   // HA discovery msg's are rather large, reset the buffer size to release some memory
-  resetMQTTBufferSize();
+  // resetMQTTBufferSize();
 
   return _result;
 }
