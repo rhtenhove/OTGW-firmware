@@ -1,4 +1,4 @@
-# ESP8266 based OTGW-firmware for Nodoshop hardware
+# ESP8266 based OTGW-firmware for Nodoshop hardware by ERu
 
 [![Join the Discord chat](https://img.shields.io/discord/812969634638725140.svg?style=flat-square)](https://discord.gg/zjW3ju7vGQ)
 
