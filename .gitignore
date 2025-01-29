@@ -9,3 +9,6 @@ Arduino/**
 libraries/**
 staging/**
 arduino-cli.yaml
+/arduino
+/bin
+/build

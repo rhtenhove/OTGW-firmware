@@ -29,7 +29,7 @@ MKFS = $(wildcard arduino/packages/esp8266/tools/mklittlefs/*/mklittlefs)
 TOOLS = $(wildcard arduino/packages/esp8266/hardware/esp8266/*/tools)
 ESPTOOL = python3 $(TOOLS)/esptool/esptool.py
 BOARD = $(PLATFORM):d1_mini
-FQBN = $(BOARD):eesz=4M2M,xtal=160
+FQBN = $(BOARD):eesz=4M2M,xtal=160,ip=hb2f
 IMAGE = build/$(INO).bin
 FILESYS = build/$(INO).littlefs.bin
 
